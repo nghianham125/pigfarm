@@ -1,9 +1,7 @@
-'use client'
-import Script from "next/script";
-import "bootstrap/dist/css/bootstrap.min.css"
+'use client';
+import "bootstrap/dist/css/bootstrap.min.css";
 import '/public/assets/font-awesome/css/all.min.css';
 import '/public/assets/css/feed.css';
-
 
 import React, { useState } from 'react';
 import { Table, Button, Space, Modal, Form, Input, Select, Checkbox, message } from 'antd';
@@ -11,48 +9,9 @@ import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
-const columns = (handleEdit, handleDelete) => [
-    {
-        title: 'Tên thức ăn',
-        dataIndex: 'feedName',
-        sorter: (a, b) => a.feedName.localeCompare(b.feedName),
-    },
-    {
-        title: 'Loại thức ăn',
-        dataIndex: 'feedTypeId',
-    },
-    {
-        title: 'Lượng thức ăn mỗi con',
-        dataIndex: 'feedPerPig',
-    },
-    {
-        title: 'Khu vực',
-        dataIndex: 'areasId',
-    },
-    {
-        title: 'Số lượng tồn kho',
-        dataIndex: 'feedQuantity',
-    },
-    {
-        title: 'Hành động',
-        render: (text, record) => (
-            <Space size="middle">
-                <Button
-                    icon={<EditOutlined />}
-                    onClick={() => handleEdit(record)}
-                />
-                <Button
-                    icon={<DeleteOutlined />}
-                    onClick={() => handleDelete(record.key)}
-                />
-            </Space>
-        ),
-    },
-];
-
 const initialData = [
     {
-        key: '1',
+        key: 'feed1',
         feedName: 'Thức ăn loại A',
         feedTypeId: 'Loại 1',
         feedPerPig: 50,
@@ -60,7 +19,7 @@ const initialData = [
         feedQuantity: 100,
     },
     {
-        key: '2',
+        key: 'feed2',
         feedName: 'Thức ăn loại B',
         feedTypeId: 'Loại 2',
         feedPerPig: 60,
@@ -70,53 +29,110 @@ const initialData = [
 ];
 
 export default function FeedCategoryManagement() {
-    const [data, setData] = useState(initialData);
+    const [data, setData] = useState([]); // Dữ liệu phiếu nhập
     const [isPhiNhapModalOpen, setIsPhiNhapModalOpen] = useState(false);
     const [formPhiNhap] = Form.useForm();
-    const [selectedFeeds, setSelectedFeeds] = useState([]);
-    const [addedFeeds, setAddedFeeds] = useState([]);
+    const [selectedFeeds, setSelectedFeeds] = useState([]); // Thức ăn đã chọn cho phiếu nhập
+    const [addedFeeds, setAddedFeeds] = useState([]); // Thức ăn để thêm
+    const [importId, setImportId] = useState(1); // ID phiếu nhập duy nhất
 
     const handleAdd = () => {
-        setIsPhiNhapModalOpen(true); // Open the 'Phiếu nhập' modal
+        setIsPhiNhapModalOpen(true); // Mở modal 'Phiếu nhập'
     };
 
     const handlePhiNhapOk = () => {
-        // Confirmation message when the "Xác nhận" button is clicked
-        message.success('Phiếu nhập đã được xác nhận!');
-        setAddedFeeds([]); // Reset added feeds after confirmation
-        setIsPhiNhapModalOpen(false); // Close the modal
+        const values = formPhiNhap.getFieldsValue();
+        if (addedFeeds.length > 0) {
+            const newImportSlip = {
+                key: importId,
+                area: values.area,
+                days: values.days,
+                feeds: addedFeeds,
+            };
+
+            setData(prevData => [...prevData, newImportSlip]);
+            setImportId(prevId => prevId + 1); // Tăng ID phiếu nhập
+            message.success('Phiếu nhập đã được xác nhận!');
+
+            setAddedFeeds([]); // Reset thức ăn đã thêm sau khi xác nhận
+        } else {
+            message.warning('Vui lòng thêm thức ăn trước khi xác nhận!');
+        }
+
+        setIsPhiNhapModalOpen(false); // Đóng modal
     };
 
     const handlePhiNhapCancel = () => {
         setIsPhiNhapModalOpen(false);
-        setSelectedFeeds([]);
-        setAddedFeeds([]);
+        setSelectedFeeds([]); // Reset thức ăn đã chọn
+        setAddedFeeds([]); // Reset thức ăn đã thêm
+        formPhiNhap.resetFields(); // Reset các trường form
     };
 
-    const handleAddFeedToList = () => {
-        const values = formPhiNhap.getFieldsValue();
-        const updatedFeeds = selectedFeeds.map(feed => ({
-            ...feed,
-            expectedQuantity: values[feed.key],
-        }));
 
-        setAddedFeeds(prev => [...prev, ...updatedFeeds]);
-        setSelectedFeeds([]);
-        formPhiNhap.resetFields();
-    };
+
+
 
     const handleSelectFeed = (feed, checked) => {
         if (checked) {
-            setSelectedFeeds([...selectedFeeds, feed]);
+            // Thêm thức ăn vào danh sách đã chọn
+            setSelectedFeeds(prev => [...prev, feed]);
         } else {
-            setSelectedFeeds(selectedFeeds.filter(f => f.key !== feed.key));
+            // Xóa thức ăn ra khỏi danh sách đã chọn
+            setSelectedFeeds(prev => prev.filter(f => f.key !== feed.key));
         }
     };
+
+    const handleInputChange = (feed, value) => {
+        formPhiNhap.setFieldsValue({ [feed.key]: value });
+
+        // Cập nhật addedFeeds
+        setAddedFeeds(prev => {
+            const existingFeed = prev.find(f => f.key === feed.key);
+            if (existingFeed) {
+                return prev.map(f => f.key === feed.key ? { ...f, expectedQuantity: value } : f);
+            }
+            return [...prev, { ...feed, expectedQuantity: value }];
+        });
+    };
+
 
     const feedOptions = initialData.map(feed => ({
         ...feed,
         expectedQuantity: 0,
     }));
+
+    const columns = [
+        {
+            title: 'ID phiếu nhập',
+            dataIndex: 'key',
+        },
+        {
+            title: 'Khu vực',
+            dataIndex: 'area',
+        },
+        {
+            title: 'Số ngày thêm',
+            dataIndex: 'days',
+        },
+        {
+            title: 'Hành động',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Button icon={<EditOutlined />} />
+                    <Button icon={<DeleteOutlined />} />
+                    <Button
+                        type="link"
+                        onClick={() => {
+                            message.info(`Thức ăn đã nhập: ${record.feeds.map(feed => `${feed.feedName}: ${feed.expectedQuantity}`).join(', ')}`);
+                        }}
+                    >
+                        Xem chi tiết
+                    </Button>
+                </Space>
+            ),
+        },
+    ];
 
     return (
         <>
@@ -134,36 +150,32 @@ export default function FeedCategoryManagement() {
                         Tạo phiếu nhập
                     </Button>
                     <Table
-                        columns={columns()}
+                        columns={columns}
                         dataSource={data}
                     />
                 </div>
             </div>
 
-            {/* Modal for Phiếu nhập */}
+            {/* Modal cho Phiếu nhập */}
             <Modal
                 title="Tạo phiếu nhập"
                 open={isPhiNhapModalOpen}
                 onOk={handlePhiNhapOk}
                 onCancel={handlePhiNhapCancel}
                 footer={[
-                    <Button key="add" onClick={handleAddFeedToList}>Thêm</Button>,
                     <Button key="confirm" type="primary" onClick={handlePhiNhapOk}>Xác nhận</Button>
                 ]}
                 width={800}
             >
-                <Form
-                    form={formPhiNhap}
-                    layout="vertical"
-                >
-                    <Form.Item label="Khu vực" name="area">
+                <Form form={formPhiNhap} layout="vertical">
+                    <Form.Item label="Khu vực" name="area" rules={[{ required: true, message: 'Vui lòng chọn khu vực!' }]}>
                         <Select placeholder="Chọn khu vực">
                             <Option value="Khu A">Khu A</Option>
                             <Option value="Khu B">Khu B</Option>
                             <Option value="Khu C">Khu C</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item label="Số ngày cần thêm" name="days">
+                    <Form.Item label="Số ngày cần thêm" name="days" rules={[{ required: true, message: 'Vui lòng nhập số ngày!' }]}>
                         <Input type="number" placeholder="Nhập số ngày cần thêm" />
                     </Form.Item>
                     <div className="modal-content-container" style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 0' }}>
@@ -181,24 +193,20 @@ export default function FeedCategoryManagement() {
                                         style={{ width: "60%" }}
                                         placeholder="Số lượng dự kiến"
                                         type="number"
-                                        onChange={(e) =>
-                                            formPhiNhap.setFieldsValue({ [feed.key]: e.target.value })
-                                        }
+                                        name={feed.key}
+                                        onChange={(e) => handleInputChange(feed, e.target.value)}
+                                        disabled={!selectedFeeds.some(f => f.key === feed.key)}
                                     />
                                 </div>
                             ))}
                         </div>
                         <div className="right-side" style={{ flex: 1, padding: '16px', border: '1px solid #f0f0f0', borderRadius: '8px' }}>
-                            <h3 style={{ marginBottom: '16px' }}>Phiếu nhập đã thêm</h3>
-                            {addedFeeds.length > 0 ? (
-                                addedFeeds.map((feed, index) => (
-                                    <div key={index} style={{ marginBottom: '8px' }}>
-                                        <span>{feed.feedName}: {feed.expectedQuantity}</span>
-                                    </div>
-                                ))
-                            ) : (
-                                <span>Chưa có phiếu nhập nào</span>
-                            )}
+                            <h3 style={{ marginBottom: '16px' }}>Chi tiết phiếu nhập</h3>
+                            <ul>
+                                {addedFeeds.map(feed => (
+                                    <li key={feed.key}>{feed.feedName}: {feed.expectedQuantity}</li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
                 </Form>

@@ -71,9 +71,7 @@ const initialData = [
 export default function FeedCategoryManagement() {
     const [data, setData] = useState(initialData);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isPhiNhapModalOpen, setIsPhiNhapModalOpen] = useState(false); // For 'Phiếu nhập' modal
     const [form] = Form.useForm();
-    const [formPhiNhap] = Form.useForm(); // Separate form for 'Phiếu nhập'
     const [editingKey, setEditingKey] = useState(null);
 
     const handleEdit = (record) => {
@@ -99,10 +97,6 @@ export default function FeedCategoryManagement() {
                 setData(data.filter(item => item.key !== key));
             },
         });
-    };
-
-    const handleAdd = () => {
-        setIsPhiNhapModalOpen(true); // Open the 'Phiếu nhập' modal
     };
 
     const handleOk = () => {
@@ -133,21 +127,8 @@ export default function FeedCategoryManagement() {
         });
     };
 
-    const handlePhiNhapOk = () => {
-        formPhiNhap.validateFields().then(values => {
-            message.success('Phiếu nhập đã được tạo thành công!');
-            setIsPhiNhapModalOpen(false);
-        }).catch(info => {
-            console.log('Validate Failed:', info);
-        });
-    };
-
     const handleCancel = () => {
         setIsModalOpen(false);
-    };
-
-    const handlePhiNhapCancel = () => {
-        setIsPhiNhapModalOpen(false);
     };
 
     return (
@@ -167,14 +148,6 @@ export default function FeedCategoryManagement() {
                     <h2>Quản lí thức ăn</h2>
                 </div>
                 <div className="ct_manage">
-                    <Button
-                        type="primary"
-                        icon={<PlusOutlined />}
-                        onClick={handleAdd}
-                        style={{ marginBottom: 16 }}
-                    >
-                        Tạo phiếu nhập
-                    </Button>
                     <Table
                         columns={columns(handleEdit, handleDelete)}
                         dataSource={data}
@@ -231,36 +204,6 @@ export default function FeedCategoryManagement() {
                         name="feedQuantity"
                         label="Số lượng tồn kho"
                         rules={[{ required: true, message: 'Vui lòng nhập số lượng tồn kho!' }]}
-                    >
-                        <Input type="number" />
-                    </Form.Item>
-                </Form>
-            </Modal>
-
-            {/* Modal for Phiếu nhập */}
-            <Modal
-                title="Tạo phiếu nhập"
-                open={isPhiNhapModalOpen}
-                onOk={handlePhiNhapOk}
-                onCancel={handlePhiNhapCancel}
-                okText="Xác nhận"
-                cancelText="Hủy"
-            >
-                <Form
-                    form={formPhiNhap}
-                    layout="vertical"
-                >
-                    <Form.Item
-                        name="feedId"
-                        label="Mã thức ăn"
-                        rules={[{ required: true, message: 'Vui lòng nhập mã thức ăn!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name="expectedQuantity"
-                        label="Số lượng dự kiến"
-                        rules={[{ required: true, message: 'Vui lòng nhập số lượng dự kiến!' }]}
                     >
                         <Input type="number" />
                     </Form.Item>

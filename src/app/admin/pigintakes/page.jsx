@@ -27,10 +27,11 @@ const initialData = [
 const PigIntakes = () => {
     const [data, setData] = useState(initialData);
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+    const [isViewDetailModalVisible, setIsViewDetailModalVisible] = useState(false);
     const [selectedSlipId, setSelectedSlipId] = useState(null);
+    const [selectedDetails, setSelectedDetails] = useState(null);
     const [form] = Form.useForm();
     const [detailForm] = Form.useForm();
-
 
     const columns = [
         {
@@ -57,8 +58,16 @@ const PigIntakes = () => {
                 </Button>
             ),
         },
+        {
+            title: 'Xem chi tiết',
+            key: 'viewDetails',
+            render: (_, record) => (
+                <Button onClick={() => viewDetails(record)}>
+                    Xem chi tiết
+                </Button>
+            ),
+        },
     ];
-
 
     // Function to show the detail modal for adding details to an intake slip
     const showDetailModal = (intakeSlipId) => {
@@ -66,10 +75,15 @@ const PigIntakes = () => {
         setIsDetailModalVisible(true);
     };
 
+    const viewDetails = (record) => {
+        setSelectedDetails(record);
+        setIsViewDetailModalVisible(true);
+    };
+
     const handleOk = () => {
         form.validateFields().then(values => {
             const newRecord = {
-                intakeSlipId: data.length + 1,
+                intakeSlipId: (data.length + 1).toString(), // Ensure the ID is a string
                 deliveryDate: values.deliveryDate.toISOString(),
                 expectedQuantity: values.expectedQuantity || 0,
                 receivedQuantity: values.receivedQuantity || 0,
@@ -77,7 +91,7 @@ const PigIntakes = () => {
                 status: 'Chưa xét duyệt',
             };
             setData([...data, newRecord]);
-            setIsModalVisible(false);
+            setIsDetailModalVisible(false);
             form.resetFields();
         }).catch(info => {
             console.log('Xác nhận thất bại:', info);
@@ -86,7 +100,21 @@ const PigIntakes = () => {
 
     const handleDetailOk = () => {
         detailForm.validateFields().then(values => {
-            // Handle additional details for the selected intake slip here
+            const updatedData = data.map(record => {
+                if (record.intakeSlipId === selectedSlipId) {
+                    return {
+                        ...record,
+                        expectedQuantity: values.expectedQuantity,
+                        receivedQuantity: values.receivedQuantity,
+                        acceptedQuantity: values.acceptedQuantity,
+                        status: values.approvalStatus || record.status, // Update status if provided
+                        // You can add any other details you want to include in the updated record here
+                    };
+                }
+                return record;
+            });
+
+            setData(updatedData); // Update the data state with new details
             setIsDetailModalVisible(false);
             detailForm.resetFields();
         }).catch(info => {
@@ -96,6 +124,7 @@ const PigIntakes = () => {
 
     const handleCancel = () => {
         setIsDetailModalVisible(false);
+        setIsViewDetailModalVisible(false);
     };
 
     return (
@@ -177,6 +206,25 @@ const PigIntakes = () => {
                     </Form>
                 </Modal>
 
+                {/* Modal Xem Chi Tiết */}
+                <Modal
+                    title={`Chi tiết phiếu nhập ID: ${selectedSlipId}`}
+                    open={isViewDetailModalVisible}
+                    onOk={handleCancel}
+                    onCancel={handleCancel}
+                    okText="Đóng"
+                >
+                    {selectedDetails && (
+                        <div>
+                            <p><strong>ID Phiếu Nhập:</strong> {selectedDetails.intakeSlipId}</p>
+                            <p><strong>Ngày Nhập:</strong> {moment(selectedDetails.deliveryDate).format('YYYY-MM-DD HH:mm:ss')}</p>
+                            <p><strong>Số Lượng Dự Kiến:</strong> {selectedDetails.expectedQuantity}</p>
+                            <p><strong>Số Lượng Nhận Được:</strong> {selectedDetails.receivedQuantity}</p>
+                            <p><strong>Số Lượng Chấp Nhận:</strong> {selectedDetails.acceptedQuantity}</p>
+                            <p><strong>Trạng Thái Xét Duyệt:</strong> {selectedDetails.status}</p>
+                        </div>
+                    )}
+                </Modal>
             </div>
         </>
     );
