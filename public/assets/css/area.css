@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.content {
+    width: 100%;
+}
+
+.ct_title {
+    width: 100%;
+}
+
+.ct_text {
+    width: 100%;
+}
+
+.ct_manage {
+    width: 100%;
+}
+
+.table_manage {
+    width: 100%;
+}
+
+.ct_title h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 10px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.ct_title h2::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #3498db;
+}
+
+.ct_text p {
+    font-size: 16px;
+    color: #7f8c8d;
+    text-align: center;
+}
+
+.ct_manage {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ant-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 5px;
+}
+
+.ant-btn-primary {
+    background-color: #2ecc71;
+    border-color: #2ecc71;
+}
+
+/* Modal chỉnh sửa */
+.ant-modal-content {
+    border-radius: 10px;
+}
+
+.ant-modal-header {
+    background-color: #3498db;
+    color: #fff;
+    border-bottom: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.ant-modal-title {
+    font-size: 18px;
+}
+
+.ant-modal-footer button {
+    font-size: 14px;
+}
+
+.ant-form-item-label>label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+
+.ant-input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}

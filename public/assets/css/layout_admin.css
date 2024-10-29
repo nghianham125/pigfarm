@@ -1,0 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main {
+    width: 100%;
+    display: flex;
+}
+
+/* chiều cao layout */
+.ant-layout {
+    height: 1050px;
+}
+
+/* avatar */
+.d_avatar {
+    text-align: right;
+    padding-right: 80px;
+}
+
+.d_username {
+    padding-left: 10px;
+}
+
+/* menu */
+.menu_qly .ant-menu-item,
+.menu_qly .ant-menu-submenu-title {
+    font-size: 16px;
+    /* Tăng cỡ chữ */
+}
+
+.ant-layout-sider {
+    flex: 0 0 250px !important;
+    max-width: 250px !important;
+    min-width: 250px !important;
+    width: 250px !important;
+}
+
+.ant-layout-sider-collapsed {
+    flex: 0 0 80px !important;
+    max-width: 80px !important;
+    min-width: 80px !important;
+    width: 80px !important;
+}
+
+/* ALL LINK */
+a {
+    text-decoration: none !important;
+}
+
+/* Thanh Nav */
+.d_nav {
+    display: flex;
+}
+
+.ant-input-affix-wrapper {
+    height: 40px;
+    width: 60%;
+    margin-top: 13px;
+}

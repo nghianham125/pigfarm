@@ -1,0 +1,25 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.content {
+    width: 100%;
+}
+
+.ct_title {
+    width: 100%;
+}
+
+.ct_text {
+    width: 100%;
+}
+
+.ct_manage {
+    width: 100%;
+}
+
+.table_manage {
+    width: 100%;
+}
