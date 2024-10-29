@@ -45,8 +45,7 @@ export default function FeedCategoryManagement() {
         url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/FeedTypes`,
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyMmUwNzQ2Mi0wNTQ2LTQ0NGYtODBiZC1jZGJmMjI1ZjdlOTAiLCJlbWFpbCI6IkFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTczMDE2NDYwOSwiZXhwIjoxNzMwMTY4MjA5LCJpYXQiOjE3MzAxNjQ2MDksImlzcyI6IkJhY2tFbmQiLCJhdWQiOiJGcm9udEVuZCJ9.qlcoi2fuC9127lYaF2jrzdsBTTutxZuR0qC33bieunM", // Replace with actual token
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
       // Assuming the API returns an object with a data structure like response.data.data.items
@@ -91,8 +90,7 @@ export default function FeedCategoryManagement() {
             url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/FeedTypes`,
             headers: {
               "Content-Type": "application/json",
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyMmUwNzQ2Mi0wNTQ2LTQ0NGYtODBiZC1jZGJmMjI1ZjdlOTAiLCJlbWFpbCI6IkFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTczMDE2NTMxOSwiZXhwIjoxNzMwMTY4OTE5LCJpYXQiOjE3MzAxNjUzMTksImlzcyI6IkJhY2tFbmQiLCJhdWQiOiJGcm9udEVuZCJ9.Yxn3MLddqmLYFwPfBaAaOQ4n5-lJF81rjPZ7iR9xV9Q", // Replace with actual token
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },
             params: {
               id: key,
@@ -123,8 +121,7 @@ export default function FeedCategoryManagement() {
         url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/FeedTypes`,
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyMmUwNzQ2Mi0wNTQ2LTQ0NGYtODBiZC1jZGJmMjI1ZjdlOTAiLCJlbWFpbCI6IkFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTczMDE2NDYwOSwiZXhwIjoxNzMwMTY4MjA5LCJpYXQiOjE3MzAxNjQ2MDksImlzcyI6IkJhY2tFbmQiLCJhdWQiOiJGcm9udEVuZCJ9.qlcoi2fuC9127lYaF2jrzdsBTTutxZuR0qC33bieunM", // Replace with actual token
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         data: {
           feedTypeName: feedTypeName,
@@ -155,8 +152,7 @@ export default function FeedCategoryManagement() {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyMmUwNzQ2Mi0wNTQ2LTQ0NGYtODBiZC1jZGJmMjI1ZjdlOTAiLCJlbWFpbCI6IkFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTczMDE2NDYwOSwiZXhwIjoxNzMwMTY4MjA5LCJpYXQiOjE3MzAxNjQ2MDksImlzcyI6IkJhY2tFbmQiLCJhdWQiOiJGcm9udEVuZCJ9.qlcoi2fuC9127lYaF2jrzdsBTTutxZuR0qC33bieunM", // Replace with actual token
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         params: {
           id: key,

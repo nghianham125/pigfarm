@@ -58,7 +58,6 @@ export default function AreaManagement() {
         url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/Areas`,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyMmUwNzQ2Mi0wNTQ2LTQ0NGYtODBiZC1jZGJmMjI1ZjdlOTAiLCJlbWFpbCI6IkFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTczMDE3MDkyMywiZXhwIjoxNzMwMTc0NTIzLCJpYXQiOjE3MzAxNzA5MjMsImlzcyI6IkJhY2tFbmQiLCJhdWQiOiJGcm9udEVuZCJ9.o_H0H4oDl4HZMXpsQIRoqyY20mDP5ChySLU1WG4dlCw`,
         },
         data: {
           name: AreaName,
@@ -88,7 +87,7 @@ export default function AreaManagement() {
         url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/Areas`,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyMmUwNzQ2Mi0wNTQ2LTQ0NGYtODBiZC1jZGJmMjI1ZjdlOTAiLCJlbWFpbCI6IkFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTczMDE3MDkyMywiZXhwIjoxNzMwMTc0NTIzLCJpYXQiOjE3MzAxNzA5MjMsImlzcyI6IkJhY2tFbmQiLCJhdWQiOiJGcm9udEVuZCJ9.o_H0H4oDl4HZMXpsQIRoqyY20mDP5ChySLU1WG4dlCw`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
       if (response.status === 200) {
@@ -116,7 +115,7 @@ export default function AreaManagement() {
         url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/Areas`,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyMmUwNzQ2Mi0wNTQ2LTQ0NGYtODBiZC1jZGJmMjI1ZjdlOTAiLCJlbWFpbCI6IkFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTczMDE3MDkyMywiZXhwIjoxNzMwMTc0NTIzLCJpYXQiOjE3MzAxNzA5MjMsImlzcyI6IkJhY2tFbmQiLCJhdWQiOiJGcm9udEVuZCJ9.o_H0H4oDl4HZMXpsQIRoqyY20mDP5ChySLU1WG4dlCw`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         params: {
           id: key,
@@ -153,7 +152,7 @@ export default function AreaManagement() {
         url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/Areas/${key}`,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyMmUwNzQ2Mi0wNTQ2LTQ0NGYtODBiZC1jZGJmMjI1ZjdlOTAiLCJlbWFpbCI6IkFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTczMDE3MDkyMywiZXhwIjoxNzMwMTc0NTIzLCJpYXQiOjE3MzAxNzA5MjMsImlzcyI6IkJhY2tFbmQiLCJhdWQiOiJGcm9udEVuZCJ9.o_H0H4oDl4HZMXpsQIRoqyY20mDP5ChySLU1WG4dlCw`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
       if (response.status === 200) {

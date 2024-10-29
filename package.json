@@ -20,7 +20,8 @@
     "next": "14.2.15",
     "owl.carousel": "^2.3.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sonner": "^1.5.0"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.31",
