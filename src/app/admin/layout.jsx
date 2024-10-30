@@ -19,6 +19,7 @@ import {
 import '/public/assets/css/layout_admin.css'; // Adjust path if necessary
 import '/public/assets/font-awesome/css/all.min.css';
 import Search from 'antd/es/transfer/search';
+import AppLoading from "@/app/admin/components/app.applayout";
 
 const { Header, Sider, Content } = Layout;
 const onSearch = (value, _e, info) => console.log(info?.source, value);
@@ -267,7 +268,9 @@ export default function RootLayout({ children }) {
                                     borderRadius: borderRadiusLG,
                                 }}
                             >
-                                {children} {/* Render child components */}
+                                <AppLoading>
+                                    {children} {/* Render child components */}
+                                </AppLoading>
                             </Content>
 
                             {/* Modal for editing user info */}

@@ -5,7 +5,7 @@ import '/public/assets/css/feed.css';
 
 import React, { useState } from 'react';
 import { Table, Button, Space, Modal, Form, Input, Select, Checkbox, message } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -35,6 +35,8 @@ export default function FeedCategoryManagement() {
     const [selectedFeeds, setSelectedFeeds] = useState([]); // Thức ăn đã chọn cho phiếu nhập
     const [addedFeeds, setAddedFeeds] = useState([]); // Thức ăn để thêm
     const [importId, setImportId] = useState(1); // ID phiếu nhập duy nhất
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false); // Modal hiển thị chi tiết phiếu nhập
+    const [currentDetail, setCurrentDetail] = useState(null); // Dữ liệu chi tiết phiếu nhập
 
     const handleAdd = () => {
         setIsPhiNhapModalOpen(true); // Mở modal 'Phiếu nhập'
@@ -69,10 +71,6 @@ export default function FeedCategoryManagement() {
         formPhiNhap.resetFields(); // Reset các trường form
     };
 
-
-
-
-
     const handleSelectFeed = (feed, checked) => {
         if (checked) {
             // Thêm thức ăn vào danh sách đã chọn
@@ -96,7 +94,6 @@ export default function FeedCategoryManagement() {
         });
     };
 
-
     const feedOptions = initialData.map(feed => ({
         ...feed,
         expectedQuantity: 0,
@@ -119,20 +116,24 @@ export default function FeedCategoryManagement() {
             title: 'Hành động',
             render: (_, record) => (
                 <Space size="middle">
-                    <Button icon={<EditOutlined />} />
                     <Button icon={<DeleteOutlined />} />
                     <Button
                         type="link"
+                        icon={<EyeOutlined />} // Use the EyeOutlined icon here
                         onClick={() => {
-                            message.info(`Thức ăn đã nhập: ${record.feeds.map(feed => `${feed.feedName}: ${feed.expectedQuantity}`).join(', ')}`);
+                            setCurrentDetail(record);
+                            setIsDetailModalOpen(true);
                         }}
-                    >
-                        Xem chi tiết
-                    </Button>
+                    />
                 </Space>
             ),
         },
     ];
+
+    const handleDetailModalCancel = () => {
+        setIsDetailModalOpen(false);
+        setCurrentDetail(null);
+    };
 
     return (
         <>
@@ -210,6 +211,31 @@ export default function FeedCategoryManagement() {
                         </div>
                     </div>
                 </Form>
+            </Modal>
+
+            {/* Modal cho chi tiết phiếu nhập */}
+            <Modal
+                title="Chi tiết phiếu nhập"
+                open={isDetailModalOpen}
+                onCancel={handleDetailModalCancel}
+                footer={[
+                    <Button key="close" onClick={handleDetailModalCancel}>Đóng</Button>,
+                ]}
+                width={600}
+            >
+                {currentDetail && (
+                    <>
+                        <p><strong>ID phiếu nhập:</strong> {currentDetail.key}</p>
+                        <p><strong>Khu vực:</strong> {currentDetail.area}</p>
+                        <p><strong>Số ngày thêm:</strong> {currentDetail.days}</p>
+                        <h3>Danh sách thức ăn</h3>
+                        <ul>
+                            {currentDetail.feeds.map((feed, index) => (
+                                <li key={index}>{feed.feedName}: {feed.expectedQuantity}</li>
+                            ))}
+                        </ul>
+                    </>
+                )}
             </Modal>
         </>
     );
