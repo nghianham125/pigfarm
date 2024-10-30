@@ -161,7 +161,10 @@ export default function AnimalManagement() {
           areasId: firstArea.id,
         },
       });
-      console.log(response);
+      if (response.status === 200) {
+        message.success("Đơn nhập đã được tạo thành công!");
+        setIsModalVisible(false);
+      }
     } catch (error) {
       message.error(error.response.data.message);
     }

@@ -95,6 +95,7 @@ const PigIntakes = () => {
           AreasId: "fa1e5ba1-c2b1-4ce0-8a59-2a82bc0c0a33",
         },
       });
+      
       setData((prevData) =>
         prevData.map((item) =>
           item.key === response.data.data.id
@@ -180,18 +181,19 @@ const PigIntakes = () => {
       console.log(response.data.data);
       setData((prevData) =>
         prevData.map((item) =>
-          item.key === response.data.data.PigIntakeId
+          item.key === response.data.data.pigIntakeId
             ? {
                 ...item,
                 RemainingAmount: response.data.data.remainingAmount,
                 TotalPrice: response.data.data.totalPrice,
+                deliveryDate: values.deliveryDate,
               }
             : item
         )
       );
       toast.success(
-        `Số tiền của hóa đơn này là: ${response.data.data.TotalPrice},
-        Số tiền còn lại là: ${response.data.data.RemainingAmount}`
+        `Số tiền của hóa đơn này là: ${response.data.data.totalPrice},
+        Số tiền còn lại là: ${response.data.data.remainingAmount}`
       );
       setIsDetailModalVisible(false);
       detailForm.resetFields();
