@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   Form,
@@ -19,17 +19,18 @@ import {
   Typography,
   Layout,
   Menu,
+  Spin,
 } from "antd";
 import {
   SearchOutlined,
   SaveOutlined,
   HomeOutlined,
-  FileTextOutlined,
   CalendarOutlined,
   MedicineBoxOutlined,
   DatabaseOutlined,
   SettingOutlined,
   TeamOutlined,
+  LoadingOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import Link from "next/link";
@@ -79,23 +80,23 @@ const VACCINES = [
   // thêm các vaccine khác...
 ];
 
-const DISEASES = [
-  {
-    id: 1,
-    name: "Viêm phổi",
-    symptoms: "Ho, sốt, thở nhanh, bỏ ăn",
-    treatments: [1, 2], // ID của các thuốc điều trị phù hợp
-    note: "Cách ly, điều trị kháng sinh",
-  },
-  {
-    id: 2,
-    name: "Tiêu chảy",
-    symptoms: "Phân lỏng, mất nước, bỏ ăn",
-    treatments: [3, 4],
-    note: "Bổ sung nước và điện giải",
-  },
-  // thêm các bệnh khác...
-];
+// const DISEASES = [
+//   {
+//     id: 1,
+//     name: "Viêm phổi",
+//     symptoms: "Ho, sốt, thở nhanh, bỏ ăn",
+//     treatments: [1, 2], // ID của các thuốc điều trị phù hợp
+//     note: "Cách ly, điều trị kháng sinh",
+//   },
+//   {
+//     id: 2,
+//     name: "Tiêu chảy",
+//     symptoms: "Phân lỏng, mất nước, bỏ ăn",
+//     treatments: [3, 4],
+//     note: "Bổ sung nước và điện giải",
+//   },
+//   // thêm các bệnh khác...
+// ];
 
 const MEDICINES = [
   {
@@ -255,6 +256,53 @@ const TopNavigation = () => {
   );
 };
 
+const LoadingScreen = () => (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      background: "#fff9f0",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 9999,
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "16px",
+      }}
+    >
+      <Spin
+        indicator={
+          <LoadingOutlined
+            style={{
+              fontSize: 40,
+              color: "#d35400",
+            }}
+            spin
+          />
+        }
+      />
+      <div
+        style={{
+          color: "#8b4513",
+          fontSize: "16px",
+          marginTop: "8px",
+        }}
+      >
+        Đang tải dữ liệu...
+      </div>
+    </div>
+  </div>
+);
+
 const HealthCheck = () => {
   const [searchForm] = Form.useForm();
   const [selectedArea, setSelectedArea] = useState(null);
@@ -270,6 +318,40 @@ const HealthCheck = () => {
     ageRange: [],
     gender: null,
   });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([
+      document.fonts.ready,
+      new Promise((resolve) => setTimeout(resolve, 800)),
+    ]).then(() => {
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    `;
+    document.head.appendChild(styleSheet);
+    return () => styleSheet.remove();
+  }, []);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   // Xử lý tìm kiếm và lọc
   const handleSearch = () => {
@@ -364,9 +446,9 @@ const HealthCheck = () => {
                 value={selectedHouse}
                 onChange={(value) => {
                   setSelectedHouse(value);
-                  const house = AREAS.find(
-                    (a) => a.id === selectedArea
-                  )?.houses.find((h) => h.id === value);
+                  // const house = AREAS.find(
+                  //   (a) => a.id === selectedArea
+                  // )?.houses.find((h) => h.id === value);
                   setFilteredPigs(ALL_PIGS[value] || []);
                 }}
                 disabled={!selectedArea}
@@ -787,7 +869,7 @@ const HealthCheck = () => {
                   </span>
                 </div>
                 <div>
-                  <Tag color="error">Cần điều trị:</Tag>
+                  <Tag color="error">Cần điều tr:</Tag>
                   <span style={{ fontWeight: 500 }}>
                     {sickCount} con (
                     {((sickCount / selectedCount) * 100).toFixed(1)}%)
@@ -865,7 +947,7 @@ const HealthCheck = () => {
   };
 
   return (
-    <Layout>
+    <Layout className="fade-in">
       <TopNavigation />
       <Layout style={{ minHeight: "calc(100vh - 64px)" }}>
         <div style={{ padding: "24px" }}>
