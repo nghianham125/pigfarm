@@ -95,7 +95,7 @@ const PigIntakes = () => {
           AreasId: "fa1e5ba1-c2b1-4ce0-8a59-2a82bc0c0a33",
         },
       });
-      
+
       setData((prevData) =>
         prevData.map((item) =>
           item.key === response.data.data.id
